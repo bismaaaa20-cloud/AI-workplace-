@@ -1,6 +1,6 @@
 # Master Charter
 
-Version: 1.0.0 — proposed for owner approval.
+Version: 1.0.0 — APPROVED by project owner on 2026-10-31.
 
 ## Ownership
 The human project owner is the final authority for internal priorities, policy approval, agent membership, and consequential project decisions.
