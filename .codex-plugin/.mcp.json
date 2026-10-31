@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "openai_docs": {
+      "type": "http",
+      "url": "https://developers.openai.com/mcp"
+    }
+  }
+}
