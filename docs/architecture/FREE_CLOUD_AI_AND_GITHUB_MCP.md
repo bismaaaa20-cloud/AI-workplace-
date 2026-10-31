@@ -49,7 +49,7 @@ Cloud jobs may:
 4. create a feature branch and pull request;
 5. append a concise, non-sensitive handoff note.
 
-Cloud jobs must not merge to `main), alter constitutional files, or publish shared memory without owner approval.
+Cloud jobs must not merge to `main`, alter constitutional files, or publish shared memory without owner approval.
 
 ## 4. MCP connection
 
