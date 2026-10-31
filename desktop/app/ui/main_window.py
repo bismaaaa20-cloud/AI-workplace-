@@ -1,10 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import os
-from pathlib import Path
-
-from dotenv import load_dotenv
 from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal
 from PySide6.QtWidgets import (
     QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox,
@@ -13,9 +9,7 @@ from PySide6.QtWidgets import (
 
 from app.core.group_engine import GroupEngine
 from app.providers.gemini_provider import GeminiProvider
-
-
-load_dotenv(Path(__file__).resolve().parents[2] / ".env")
+from app.security.secret_store import is_configured
 
 
 class WorkerSignals(QObject):
@@ -60,9 +54,12 @@ class MainWindow(QMainWindow):
         header.addWidget(title)
         header.addWidget(subtitle)
         header.addStretch()
-        self.status = QLabel("Gemini: configured" if os.getenv("GEMINI_API_KEY") else "Gemini: API key not set")
+        self.status = QLabel("Gemini: configured" if is_configured("Gemini") else "Gemini: not configured")
         self.status.setObjectName("status")
         header.addWidget(self.status)
+        self.api_security_button = QPushButton("API Security")
+        self.api_security_button.clicked.connect(self._open_api_security)
+        header.addWidget(self.api_security_button)
         layout.addLayout(header)
 
         self.tabs = QTabWidget()
@@ -100,14 +97,57 @@ class MainWindow(QMainWindow):
         layout.addWidget(note)
         self.setCentralWidget(root)
 
+    def _open_api_security(self) -> None:
+        from PySide6.QtWidgets import QDialog, QDialogButtonBox, QComboBox, QFormLayout
+        from app.security.secret_store import save_api_key, delete_api_key
+        dialog = QDialog(self)
+        dialog.setWindowTitle("API Security — Local Vault")
+        form = QFormLayout(dialog)
+        provider = QComboBox()
+        provider.addItems(["Gemini"])
+        secret = QLineEdit()
+        secret.setEchoMode(QLineEdit.EchoMode.Password)
+        secret.setPlaceholderText("API key (hidden)")
+        state = QLabel("Configured" if is_configured("Gemini") else "Not configured")
+        form.addRow("Provider", provider)
+        form.addRow("API key", secret)
+        form.addRow("Local vault", state)
+        buttons = QDialogButtonBox()
+        save_btn = buttons.addButton("Save securely", QDialogButtonBox.ButtonRole.AcceptRole)
+        delete_btn = buttons.addButton("Delete key", QDialogButtonBox.ButtonRole.DestructiveRole)
+        buttons.addButton(QDialogButtonBox.StandardButton.Close)
+        form.addRow(buttons)
+        def save():
+            try:
+                save_api_key(provider.currentText(), secret.text())
+                secret.clear()
+                state.setText("Configured")
+                QMessageBox.information(dialog, "Saved", "Stored in the OS credential vault. The key is not sent to GitHub.")
+            except Exception:
+                secret.clear()
+                QMessageBox.critical(dialog, "Secure vault unavailable", "Could not save. Configure the OS credential manager. Plaintext fallback is disabled.")
+        def remove():
+            if QMessageBox.question(dialog, "Delete key", "Delete this key from the local vault?") == QMessageBox.StandardButton.Yes:
+                try:
+                    delete_api_key(provider.currentText())
+                    secret.clear()
+                    state.setText("Not configured")
+                except Exception:
+                    QMessageBox.critical(dialog, "Delete failed", "The OS credential vault could not delete this key.")
+        save_btn.clicked.connect(save)
+        delete_btn.clicked.connect(remove)
+        buttons.rejected.connect(dialog.reject)
+        dialog.exec()
+        self.status.setText("Gemini: configured" if is_configured("Gemini") else "Gemini: not configured")
+
     def _send_group_message(self) -> None:
         prompt = self.prompt.text().strip()
         if not prompt:
             return
-        if not os.getenv("GEMINI_API_KEY"):
+        if not is_configured("Gemini"):
             QMessageBox.information(
                 self, "Gemini API key required",
-                "Add GEMINI_API_KEY to desktop/.env. No paid provider or fallback is available."
+                "Add your key through API Security. It will be stored in your operating system credential vault."
             )
             return
         self.prompt.clear()
@@ -123,7 +163,7 @@ class MainWindow(QMainWindow):
         self.send_button.setEnabled(True)
 
     def _on_discussion_failed(self, error: str) -> None:
-        self.group_output.append(f"\n**Request failed:** {error}")
+        self.group_output.append("\n**Request failed.** Sensitive diagnostic details are hidden.")
         self.send_button.setEnabled(True)
 
     def _apply_theme(self) -> None:
