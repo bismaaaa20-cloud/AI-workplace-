@@ -1,6 +1,6 @@
 # Foundation
 
-Version: 1.0.0 — proposed for owner approval.
+Version: 1.0.0 — APPROVED by project owner on 2026-10-31.
 
 ## Purpose
 Build one durable, model-independent workplace where multiple AI assistants can maintain separate personal notebooks and use governed shared knowledge.

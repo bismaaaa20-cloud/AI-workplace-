@@ -1,6 +1,6 @@
 # AI Workplace Rule Hierarchy
 
-Version: 1.0.0 — proposed for owner approval.
+Version: 1.0.0 — APPROVED by project owner on 2026-10-31.
 
 This is an internal policy inspired by hierarchical legal systems; it is not Indonesian law.
 
