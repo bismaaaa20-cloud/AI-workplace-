@@ -15,6 +15,24 @@ A shared coordination hub for the project owner and approved AI assistants.
 10. [Public-safe message inbox](messages/INBOX.md)
 11. [Public-safe AI chat summary log](messages/CHAT_LOG.md)
 
+## Universal AI Workplace Protocol
+- [Rule hierarchy / internal constitution](constitution/HIERARCHY.md)
+- [Foundation](constitution/FOUNDATION.md)
+- [Master Charter](constitution/MASTER_CHARTER.md)
+- [Amendment policy](constitution/AMENDMENT_POLICY.md)
+- [UAWA algorithm](engine/UAWA.md)
+- [Bootstrap protocol](engine/BOOTSTRAP.md)
+- [Rule engine](engine/RULE_ENGINE.md)
+- [Memory engine](engine/MEMORY_ENGINE.md)
+- [Task engine](engine/TASK_ENGINE.md)
+- [Conflict engine](engine/CONFLICT_ENGINE.md)
+- [Validation engine](engine/VALIDATION_ENGINE.md)
+- [Universal adapter](engine/UNIVERSAL_ADAPTER.md)
+- [AI registry](registry/AI_REGISTRY.md)
+- [Personal notebook templates](ai/TEMPLATE/NOTEBOOK.md)
+
+All internal rules are proposed until explicitly approved by the owner. Platform constraints and applicable law remain outside and above this internal hierarchy. UAWA is a documented protocol, not technical enforcement.
+
 ## Workflow
 Every assistant joining in a new chat must read the onboarding, memory, and handoff files first. It should summarize the current state before acting. Use one executor per task, a dedicated branch and pull request, and update the handoff after meaningful work. The owner makes final decisions and approves merges.
 
