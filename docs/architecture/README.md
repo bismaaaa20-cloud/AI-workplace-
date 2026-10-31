@@ -2,6 +2,7 @@
 
 - [Universal AI Workplace Algorithm](UAWA.md) — model-independent operating protocol.
 - [Muk Coordinator Specification](MUK_COORDINATOR_SPEC.md) — Muk's role and planned orchestration pipeline.
+- [Muk Context-Aware Tool Routing](MUK_CONTEXT_AWARE_TOOL_ROUTING.md) — automatic selection of Skills, MCP tools, and Plugin actions from request context.
 - [AI Agent Roles](AI_AGENT_ROLES.md) — current intended role map; integrations are not implied.
 - [BugScout Integration Design](BUGSCOUT_INTEGRATION.md) — planned MCP code-checking workflow.
 - [Universal Project Workspace](UNIVERSAL_PROJECT_WORKSPACE.md) — project/workspace architecture.
