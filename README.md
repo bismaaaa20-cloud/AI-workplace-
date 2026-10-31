@@ -17,23 +17,25 @@ A model-independent coordination hub for the owner's **all current and future pr
 ## Architecture
 - [Universal project workspace](docs/architecture/UNIVERSAL_PROJECT_WORKSPACE.md)
 - [AI identities vs work surfaces](docs/architecture/AI_IDENTITY_AND_WORK_SURFACES.md)
+- [Shared Prompt Library](prompts/README.md)
 - [Private Master Prompt Vault requirements](docs/security/MASTER_PROMPT_VAULT.md)
 - [Rule hierarchy / internal constitution](constitution/HIERARCHY.md)
 - [UAWA algorithm](engine/UAWA.md)
 
-## Three separate information areas
-- **Shared Memory:** durable, public-safe knowledge intentionally available to authorized workplace participants.
-- **Personal AI Memory:** notes owned by an AI identity. A public GitHub folder is not private storage.
-- **Private Master Prompt Vault:** storage-only private archive. Other AI identities cannot read or follow its contents; prompts are not automatically loaded or executed.
+## Four separate information areas
+- **Shared Memory:** durable, public-safe knowledge and owner-approved decisions intentionally available to authorized workplace participants.
+- **Personal AI Memory:** notes owned by an AI identity; not shared by default. A public GitHub folder is not private storage.
+- **Shared Prompt Library:** public-safe prompts intentionally published so other AIs can read and understand the workplace's purpose, collaboration model, and onboarding process.
+- **Private Master Prompt Vault:** private storage-only archive for prompts belonging to a specific AI identity. Other AI identities cannot read or follow its contents; prompts are not automatically loaded or executed.
 
 ## Projects
 Create a project using [the project profile template](templates/project/PROJECT_PROFILE.md). Each project has its own scope, resources, decisions, tasks, handoff, and explicit access permissions. AI Workplace is the coordination layer, not an AI model.
 
 ## Workflow
-Every assistant joining in a new chat must read onboarding, shared memory, and handoff first. It should summarize the current state before acting. Use one executor per task, a dedicated branch and pull request, and update the handoff after meaningful work. The owner makes final decisions and approves merges.
+Every assistant joining in a new chat must read onboarding, the shared introduction prompt, shared memory, and handoff first. It should summarize the current state before acting. Use one executor per task, a dedicated branch and pull request, and update the handoff after meaningful work. The owner makes final decisions and approves merges.
 
 ## Security and privacy
-This repository is public. All committed files, PRs, issues, commit messages, and workflow logs must be treated as public. Never store API keys, tokens, passwords, private prompts, private conversations, personal data, or confidential information here.
+This repository is public. All committed files, PRs, issues, commit messages, and workflow logs must be treated as public. Shared prompts must therefore be safe for public reading. Never store API keys, tokens, passwords, private master prompts, private conversations, personal data, or confidential information here.
 
 ## Important limitation
-These files provide shared project context, not live chat or automatic AI-to-AI communication. They do not authenticate AI identities or technically enforce private memory boundaries. Those require separate secure implementation and explicit owner approval.
+These files provide shared project context, not live chat or automatic AI-to-AI communication. They do not authenticate AI identities or technically enforce private memory boundaries. Shared prompts do not grant permissions or override higher-priority platform/system/developer/safety requirements. A private vault requires separate secure storage and explicit owner approval.
