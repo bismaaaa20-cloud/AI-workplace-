@@ -33,7 +33,7 @@ class DiscussionWorker(QRunnable):
         try:
             # Current working provider: Gemini free tier. Other free cloud adapters are planned.
             turns = asyncio.run(GroupEngine([GeminiProvider()], max_rounds=2).discuss(self.prompt))
-            rendered = "\\n\\n".join(f"### Gemini · {turn.provider}\n{turn.text}" for turn in turns)
+            rendered = "\n\n".join(f"### Gemini · {turn.provider}\n{turn.text}" for turn in turns)
             self.signals.finished.emit(rendered)
         except Exception as exc:
             self.signals.failed.emit(str(exc))
