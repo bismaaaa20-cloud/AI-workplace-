@@ -8,7 +8,7 @@
 
 - Constitution v1.0.0 was approved and recorded through PR #5.
 - Python Desktop foundation was merged through PR #6.
-- A free-only cloud architecture and portable Agent Skills are being proposed in PR #7 (pending review until the pull request is opened and verified).
+- A free-only cloud architecture and portable Agent Skills are proposed in [PR #7](https://github.com/bismaaaa20-cloud/AI-workplace-/pull/7), currently open for owner review.
 - The desktop UI is still an early prototype. Gemini is the only provider currently wired into the working Group Room.
 - Groq GPT-OSS, Mistral Free mode, Cloudflare Workers AI Free, and OpenRouter `:free` are researched candidates, not yet active integrations.
 
