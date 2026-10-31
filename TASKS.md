@@ -67,13 +67,14 @@ Keep entries concise, public-safe, and actionable.
 - Notes: Owner has not written the script yet; no runtime exists.
 
 ### [MUK-004] Implement live capability registry and automatic tool router
-- Status: OPEN (design documented; implementation not started)
+- Status: IN PROGRESS (lightweight router prototype added; live registry/integrations/tests still pending)
 - Owner: Project owner
 - Executor: To be assigned
 - Scope: Build a live registry for available Skills, MCP tools, Plugin actions, and agents; implement context classification, capability matching, least-privilege filtering, cost/permission gates, tool selection, fallback, and audit records.
 - Out of scope: Claiming integrations are connected before they are configured and tested; enabling paid APIs or account connections without approval.
 - Acceptance criteria: Automated tests prove routing by context, selection of the smallest sufficient capability set, refusal of unavailable/unauthorized tools, user confirmation for consequential actions, honest failure handling, and no unapproved paid usage.
-- Related file: docs/architecture/MUK_CONTEXT_AWARE_TOOL_ROUTING.md
+- Related files: docs/architecture/MUK_CONTEXT_AWARE_TOOL_ROUTING.md, muk/router.py, muk/capabilities.example.json, tests/test_router.py
+- Notes: Prototype plans selections only; it does not execute MCP/Plugin tools or connect AI agents.
 
 ## Completed tasks
 - **AW-000:** Initial documentation-only coordination workspace merged into main (PR #1).
