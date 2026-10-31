@@ -4,7 +4,7 @@ A cloud-inference-first desktop client for the AI Workplace project. The desktop
 
 ## Current status
 
-This is an early foundation, not a finished application. The current Group Room prototype connects Gemini only. Groq, Mistral, Cloudflare Workers AI, OpenRouter free models, and GitHub remote MCP are documented as the next integration candidates; they are not yet wired into the UI.
+This is an early foundation, not a finished application. The current Group Room prototype connects Gemini only. Groq, Mistral, Cloudflare Workers AI, OpenRouter free models, and GitHub remote MCP are documented as integration candidates; they are not yet wired into the UI. **FreeLLMAPI** is now documented as an optional local-first API gateway that could connect multiple approved upstream free-tier providers through one OpenAI-compatible endpoint. It is not itself an AI model, and it is not yet installed or connected.
 
 ## Free-only policy
 
@@ -14,7 +14,7 @@ This is an early foundation, not a finished application. The current Group Room 
 - If a free quota is exhausted, return a visible blocked/quota status; never reroute to a paid endpoint.
 - OpenAI's GPT-OSS open-weight model may be served by a separate free-tier host such as Groq. That is not ChatGPT or the OpenAI API.
 
-See `docs/architecture/FREE_CLOUD_AI_AND_GITHUB_MCP.md` for current provider research, cloud execution, MCP, ChatGPT handoff, and security rules.
+See `docs/architecture/FREE_CLOUD_AI_AND_GITHUB_MCP.md` for provider research and `docs/architecture/AI_TOOLS_AND_GATEWAYS.md` for FreeLLMAPI's proposed role, limitations, and integration safeguards.
 
 ## Requirements
 
