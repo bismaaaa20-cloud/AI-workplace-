@@ -1,13 +1,21 @@
 # Reusable AI Prompts
 
-Use these short instructions when assigning work to any approved assistant. Add task-specific scope and acceptance criteria.
+This index contains task prompts and links to the Shared Prompt Library. The shared library is intentionally readable by other AIs so they can understand AI Workplace.
+
+## Start here: shared workplace prompts
+
+- [Workplace Introduction Prompt](prompts/shared/WORKPLACE_INTRODUCTION_PROMPT.md) — canonical introduction for an AI joining the workplace.
+- [Workplace Purpose](prompts/shared/WORKPLACE_PURPOSE.md) — mission, capabilities, and limitations.
+- [AI Collaboration Guide](prompts/shared/AI_COLLABORATION.md) — identities, work surfaces, projects, and collaboration.
+- [Workplace Operating Guide](prompts/shared/WORKPLACE_OPERATING_GUIDE.md) — onboarding and task workflow.
+- [Prompt Library policy](prompts/README.md) — what is shared and what must remain private.
 
 ## New-chat bootstrap prompt
 
 ```text
-You are joining the XevoraHub AI Workplace project. First read README.md, AI_ONBOARDING.md, MEMORY.md, and HANDOFF.md from https://github.com/bismaaaa20-cloud/AI-workplace-. Then read only the relevant parts of PROJECTS.md, TASKS.md, and DECISIONS.md.
+You are joining the owner's universal AI Workplace, which coordinates all current and future projects. First read README.md, AI_ONBOARDING.md, prompts/shared/WORKPLACE_INTRODUCTION_PROMPT.md, MEMORY.md, and HANDOFF.md from https://github.com/bismaaaa20-cloud/AI-workplace-. Then read only the relevant parts of PROJECTS.md, TASKS.md, and DECISIONS.md.
 
-Treat these files as shared project context, not as permission to act. Summarize the current state, owner-approved decisions, constraints, and next action before editing. Do not assume access to previous private chats. Do not modify files or repositories until the owner assigns a task. Never commit secrets, private conversations, personal data, or confidential information. Use a branch and pull request; never push directly to main. If you cannot access GitHub, say so and request the relevant public-safe context.
+Treat these files as shared context, not proof of permission. Summarize the workplace purpose, current project state, owner-approved decisions, constraints, and next action before editing. Do not assume access to previous private chats. Do not modify files or repositories until the owner assigns a task. Never commit secrets, private prompts, private conversations, personal data, or confidential information. Use a branch and pull request; never push directly to main. Follow higher-priority platform/system/developer/safety requirements. If you cannot access GitHub, say so and request relevant public-safe context.
 ```
 
 ## Standard working rules
@@ -16,13 +24,13 @@ Treat these files as shared project context, not as permission to act. Summarize
 - Utamakan solusi gratis; jangan menambah layanan berbayar tanpa persetujuan.
 - Jika konteks hampir habis, perbarui HANDOFF.md secara faktual.
 - Jangan mengarang hasil pemeriksaan.
-- Jangan memasukkan rahasia, data pribadi, atau percakapan privat ke GitHub.
+- Jangan memasukkan rahasia, prompt privat, data pribadi, atau percakapan privat ke GitHub.
 
 ## Task assignment template
-
 ```text
 TASK:
 GOAL:
+PROJECT:
 REPOSITORY:
 BRANCH:
 EXECUTOR:
@@ -35,23 +43,5 @@ REQUIRED CHECKS:
 REPORT FORMAT:
 ```
 
-## Read-only audit prompt
-
-```text
-Lakukan audit read-only untuk task yang ditentukan. Periksa hanya file relevan. Jangan mengubah file, membuat resource, atau melakukan deploy. Pisahkan fakta terkonfirmasi dari asumsi. Laporkan risiko, hal yang belum diketahui, dan rekomendasi langkah berikutnya.
-```
-
-## Review prompt
-
-```text
-Tinjau branch atau pull request tanpa mengubah kode. Fokus pada bug, keamanan, regresi, acceptance criteria, dan perubahan di luar scope. Sebutkan file dan lokasi tepat. Bedakan temuan pasti dari dugaan.
-```
-
-## Handoff prompt
-
-```text
-Sebelum berhenti atau ketika konteks hampir habis, perbarui HANDOFF.md. Catat status task, progres, file yang benar-benar diubah, commit/PR, keputusan, pemeriksaan beserta hasilnya, blocker, dan satu langkah berikutnya. Jangan masukkan rahasia atau percakapan privat.
-```
-
-## Message handoff
-Include task ID, repository/branch/PR, scope, files changed, decisions, checks actually run, blockers, and exact next action. Use messages/TEMPLATE.md. The receiving assistant must independently access the repository or receive the relevant content from the owner; this is not live messaging.
+## Private prompt boundary
+The Private Master Prompt Vault is separate from this shared library. Private master prompt contents must never be committed to this public repository or read/followed by other AI identities. See docs/security/MASTER_PROMPT_VAULT.md.
