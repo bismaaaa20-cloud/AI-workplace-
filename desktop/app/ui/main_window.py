@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import asyncio
-from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal, Qt
+from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal, Qt, QSettings
 from PySide6.QtWidgets import (
-    QDialog, QDialogButtonBox, QComboBox, QFormLayout, QFrame,
+    QDialog, QDialogButtonBox, QComboBox, QFormLayout, QFrame, QCheckBox, QSpinBox,
     QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox,
     QPushButton, QStackedWidget, QTextEdit, QVBoxLayout, QWidget,
 )
@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
         self.resize(1380, 880)
         self.setMinimumSize(980, 680)
         self.thread_pool = QThreadPool.globalInstance()
+        self.preferences = QSettings("AI Workplace", "Desktop")
         self._build_ui()
         self._apply_theme()
 
@@ -93,7 +94,7 @@ class MainWindow(QMainWindow):
         side.addWidget(self._label("WORKSPACE", "eyebrow"))
 
         self.nav_buttons: list[QPushButton] = []
-        for text, index in [("⌂   Overview", 0), ("◉   Group Room", 1), ("✧   Gemini", 2)]:
+        for text, index in [("⌂   Overview", 0), ("◉   Group Room", 1), ("✧   Gemini", 2), ("⚙   Settings", 3)]:
             button = QPushButton(text)
             button.setObjectName("navActive" if index == 0 else "navButton")
             button.setCheckable(True)
@@ -143,6 +144,7 @@ class MainWindow(QMainWindow):
         self.pages.addWidget(self._overview_page())
         self.pages.addWidget(self._group_page())
         self.pages.addWidget(self._gemini_page())
+        self.pages.addWidget(self._settings_page())
         content_layout.addWidget(self.pages, 1)
         outer.addWidget(content, 1)
         self.setCentralWidget(shell)
@@ -282,12 +284,115 @@ class MainWindow(QMainWindow):
         layout.addStretch()
         return page
 
+
+    def _settings_page(self) -> QWidget:
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(12)
+        intro = QFrame()
+        intro.setObjectName("card")
+        intro_layout = QVBoxLayout(intro)
+        intro_layout.setContentsMargins(20, 18, 20, 18)
+        intro_layout.addWidget(self._label("Workspace preferences", "sectionTitle"))
+        intro_layout.addWidget(self._label(
+            "Customize the desktop experience. API credentials remain in the operating-system vault.",
+            "muted"
+        ))
+        layout.addWidget(intro)
+
+        appearance = QFrame()
+        appearance.setObjectName("card")
+        form = QFormLayout(appearance)
+        form.setContentsMargins(20, 18, 20, 18)
+        form.setSpacing(13)
+        self.theme_choice = QComboBox()
+        self.theme_choice.addItems(["Dark", "Light", "System"])
+        self.theme_choice.setCurrentText(self.preferences.value("appearance/theme", "Dark"))
+        self.accent_choice = QComboBox()
+        self.accent_choice.addItems(["Violet", "Blue", "Teal", "Monochrome"])
+        self.accent_choice.setCurrentText(self.preferences.value("appearance/accent", "Violet"))
+        self.density_choice = QComboBox()
+        self.density_choice.addItems(["Comfortable", "Compact"])
+        self.density_choice.setCurrentText(self.preferences.value("appearance/density", "Comfortable"))
+        self.font_scale = QComboBox()
+        self.font_scale.addItems(["Small", "Default", "Large"])
+        self.font_scale.setCurrentText(self.preferences.value("appearance/font_scale", "Default"))
+        form.addRow("Appearance", self.theme_choice)
+        form.addRow("Accent color", self.accent_choice)
+        form.addRow("Layout density", self.density_choice)
+        form.addRow("Text size", self.font_scale)
+        layout.addWidget(appearance)
+
+        behavior = QFrame()
+        behavior.setObjectName("card")
+        behavior_form = QFormLayout(behavior)
+        behavior_form.setContentsMargins(20, 18, 20, 18)
+        behavior_form.setSpacing(13)
+        self.rounds_choice = QSpinBox()
+        self.rounds_choice.setRange(1, 3)
+        self.rounds_choice.setValue(int(self.preferences.value("group/max_rounds", 2)))
+        self.confirm_actions = QCheckBox("Ask before consequential external actions")
+        self.confirm_actions.setChecked(self.preferences.value("safety/confirm_actions", True, type=bool))
+        self.free_only = QCheckBox("Free-tier only; never use paid fallback")
+        self.free_only.setChecked(True)
+        self.free_only.setEnabled(False)
+        self.keep_history = QCheckBox("Keep conversation visible until the app closes")
+        self.keep_history.setChecked(self.preferences.value("privacy/session_history", True, type=bool))
+        behavior_form.addRow("Group discussion rounds", self.rounds_choice)
+        behavior_form.addRow("Safety", self.confirm_actions)
+        behavior_form.addRow("Provider policy", self.free_only)
+        behavior_form.addRow("Session display", self.keep_history)
+        layout.addWidget(behavior)
+
+        buttons = QHBoxLayout()
+        save = QPushButton("Save preferences")
+        save.setObjectName("primaryButton")
+        save.clicked.connect(self._save_preferences)
+        reset = QPushButton("Reset defaults")
+        reset.setObjectName("secondaryButton")
+        reset.clicked.connect(self._reset_preferences)
+        buttons.addWidget(save)
+        buttons.addWidget(reset)
+        buttons.addStretch()
+        layout.addLayout(buttons)
+        layout.addWidget(self._label(
+            "API keys: manage them separately in API Security. Keys are stored locally in your OS credential vault, never in GitHub.",
+            "mutedSmall"
+        ))
+        layout.addStretch()
+        return page
+
+    def _save_preferences(self) -> None:
+        self.preferences.setValue("appearance/theme", self.theme_choice.currentText())
+        self.preferences.setValue("appearance/accent", self.accent_choice.currentText())
+        self.preferences.setValue("appearance/density", self.density_choice.currentText())
+        self.preferences.setValue("appearance/font_scale", self.font_scale.currentText())
+        self.preferences.setValue("group/max_rounds", self.rounds_choice.value())
+        self.preferences.setValue("safety/confirm_actions", self.confirm_actions.isChecked())
+        self.preferences.setValue("privacy/session_history", self.keep_history.isChecked())
+        self.preferences.sync()
+        QMessageBox.information(
+            self, "Preferences saved",
+            "Your preferences are saved locally. Some visual options are staged for the next UI styling pass."
+        )
+
+    def _reset_preferences(self) -> None:
+        self.theme_choice.setCurrentText("Dark")
+        self.accent_choice.setCurrentText("Violet")
+        self.density_choice.setCurrentText("Comfortable")
+        self.font_scale.setCurrentText("Default")
+        self.rounds_choice.setValue(2)
+        self.confirm_actions.setChecked(True)
+        self.keep_history.setChecked(True)
+
     def _show_page(self, index: int) -> None:
         self.pages.setCurrentIndex(index)
         titles = [
             ("Overview", "A calm space to think, build, and collaborate."),
             ("Group Room", "One conversation, independent AI perspectives."),
             ("Gemini", "Manage your currently connected provider."),
+            ("Settings", "Tune appearance, discussion behavior, and privacy preferences."),
         ]
         self.page_title.setText(titles[index][0])
         self.page_subtitle.setText(titles[index][1])
