@@ -38,6 +38,33 @@ Keep entries concise, public-safe, and actionable.
 - Acceptance criteria: Current official limits are verified; risks and open decisions are listed; owner approves or changes the architecture.
 - Notes: Proposal is not approved. See PROJECTS.md.
 
+### [MUK-001] Document Muk coordinator architecture
+- Status: DONE (design only; no runtime script)
+- Owner: Project owner
+- Executor: ChatGPT
+- Scope: Record Muk's role, approved settings, agent roles, planning pipeline, low-memory design, and free-first limits.
+- Out of scope: Runtime implementation, live agent connections, paid APIs, deployment.
+- Acceptance criteria: Muk is documented as a coordinator inside AI Workplace, not the whole application.
+- Related files: docs/architecture/MUK_COORDINATOR_SPEC.md, docs/architecture/AI_AGENT_ROLES.md, prompts/shared/MUK_COORDINATOR_PROMPT.md
+
+### [MUK-002] Build Muk-to-BugScout MCP adapter
+- Status: OPEN
+- Owner: Project owner
+- Executor: To be assigned
+- Scope: Implement and test an MCP client adapter for the supplied BugScout server.
+- Out of scope: Rewriting BugScout, executing submitted scripts, claiming security scanning, paid services.
+- Acceptance criteria: Actual MCP calls verified; blockers trigger up to three fix/recheck rounds; failures are disclosed.
+- Related file: docs/architecture/BUGSCOUT_INTEGRATION.md
+
+### [MUK-003] Implement Muk runtime script
+- Status: BLOCKED
+- Owner: Project owner
+- Executor: To be assigned
+- Scope: Implement Muk from the documented design when the owner is ready.
+- Out of scope: Adding future agents or integrations before the owner defines them.
+- Acceptance criteria: Planning, decomposition, dependency DAG, capability matching, bounded scheduling, handoffs, validation, concise responses, and no unapproved paid APIs.
+- Notes: Owner has not written the script yet; no runtime exists.
+
 ## Completed tasks
 - **AW-000:** Initial documentation-only coordination workspace merged into main (PR #1).
 - **AW-001 workflow expansion:** merged in PR #2.
