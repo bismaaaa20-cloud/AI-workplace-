@@ -31,9 +31,9 @@ class DiscussionWorker(QRunnable):
 
     def run(self) -> None:
         try:
-            providers = [GeminiProvider()]
-            turns = asyncio.run(GroupEngine(providers, max_rounds=2).discuss(self.prompt))
-            rendered = "\n\n".join(f"### {turn.provider}\n{turn.text}" for turn in turns)
+            # One free-tier provider at this stage; the second pass is a self-review.
+            turns = asyncio.run(GroupEngine([GeminiProvider()], max_rounds=2).discuss(self.prompt))
+            rendered = "\\n\\n".join(f"### Gemini · {turn.provider}\n{turn.text}" for turn in turns)
             self.signals.finished.emit(rendered)
         except Exception as exc:
             self.signals.failed.emit(str(exc))
@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         header = QHBoxLayout()
         title = QLabel("AI WORKPLACE")
         title.setObjectName("title")
-        subtitle = QLabel("Multi-agent desktop workspace")
+        subtitle = QLabel("Free-tier-first AI desktop workspace")
         subtitle.setObjectName("muted")
         header.addWidget(title)
         header.addWidget(subtitle)
@@ -68,15 +68,15 @@ class MainWindow(QMainWindow):
         self.tabs = QTabWidget()
         self.group_output = QTextEdit()
         self.group_output.setReadOnly(True)
-        self.group_output.setPlaceholderText("Group discussion responses will appear here.")
+        self.group_output.setPlaceholderText("Gemini group-room responses will appear here.")
         group_page = QWidget()
         group_layout = QVBoxLayout(group_page)
-        group_layout.addWidget(QLabel("GROUP ROOM · moderated discussion"))
+        group_layout.addWidget(QLabel("GROUP ROOM · Gemini response + self-review"))
         group_layout.addWidget(self.group_output)
         composer = QHBoxLayout()
         self.prompt = QLineEdit()
         self.prompt.setPlaceholderText("Write a message for the AI group…")
-        self.send_button = QPushButton("Send to group")
+        self.send_button = QPushButton("Send")
         self.send_button.clicked.connect(self._send_group_message)
         self.prompt.returnPressed.connect(self._send_group_message)
         composer.addWidget(self.prompt, 1)
@@ -84,18 +84,16 @@ class MainWindow(QMainWindow):
         group_layout.addLayout(composer)
         self.tabs.addTab(group_page, "Group Room")
 
-        for name in ("ChatGPT", "Gemini", "Claude"):
-            panel = QTextEdit()
-            panel.setReadOnly(True)
-            panel.setPlaceholderText(
-                f"{name} individual session will be available when its provider is configured."
-            )
-            self.tabs.addTab(panel, name)
+        gemini_panel = QTextEdit()
+        gemini_panel.setReadOnly(True)
+        gemini_panel.setPlaceholderText("Gemini individual chat panel is planned for the next milestone.")
+        self.tabs.addTab(gemini_panel, "Gemini")
 
         layout.addWidget(self.tabs)
         note = QLabel(
-            "Prototype: Group Room currently connects Gemini only. OpenAI and Claude adapters are optional "
-            "and paid-gated. Individual panels are UI placeholders in this milestone."
+            "Only Gemini is included in this free-only prototype. When the free quota is exhausted, "
+            "the request fails visibly; the app never switches to a paid API. Current review pass uses "
+            "the same Gemini provider, not a second independent AI."
         )
         note.setObjectName("muted")
         note.setWordWrap(True)
@@ -109,12 +107,12 @@ class MainWindow(QMainWindow):
         if not os.getenv("GEMINI_API_KEY"):
             QMessageBox.information(
                 self, "Gemini API key required",
-                "Add GEMINI_API_KEY to desktop/.env. The application does not use a paid fallback."
+                "Add GEMINI_API_KEY to desktop/.env. No paid provider or fallback is available."
             )
             return
         self.prompt.clear()
         self.send_button.setEnabled(False)
-        self.group_output.append(f"\n## YOU\n{prompt}\n\n*AI agents are responding…*")
+        self.group_output.append(f"\n## YOU\n{prompt}\n\n*Gemini is responding…*")
         worker = DiscussionWorker(prompt)
         worker.signals.finished.connect(self._on_discussion_finished)
         worker.signals.failed.connect(self._on_discussion_failed)
