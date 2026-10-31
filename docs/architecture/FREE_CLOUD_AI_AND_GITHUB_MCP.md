@@ -31,6 +31,10 @@ These are hosted API services. Model inference occurs in provider infrastructure
 
 The Groq-hosted `openai/gpt-oss-120b` model is **not ChatGPT and not the OpenAI API**. It is an OpenAI open-weight model served by Groq. ChatGPT stays a separate assistant and reviewer.
 
+### FreeLLMAPI gateway candidate
+
+FreeLLMAPI is documented separately as a local-first OpenAI-compatible router, not an inference provider or AI identity. It may provide one localhost API endpoint for multiple approved upstream free-tier providers. The gateway itself does not make upstream inference free; provider quotas, terms, and data handling still apply. Keep it localhost-only, protect its unified key, disable paid routes, and stop rather than falling back to paid services. Integration is documented but not installed or connected. See `AI_TOOLS_AND_GATEWAYS.md`.
+
 ## 3. Cloud execution without laptop RAM
 
 Use GitHub Actions standard hosted runners for short-lived orchestration jobs. For public repositories, standard GitHub-hosted runners are free and unlimited under the current GitHub Actions policy. The runner is a temporary cloud VM; it is not the user's device and does not keep an agent running forever.
