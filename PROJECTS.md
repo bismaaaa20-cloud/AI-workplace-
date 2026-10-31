@@ -1,6 +1,8 @@
 # Project Map
 
-This file describes project boundaries and current status. It is a coordination note, not a source of deployment credentials or private configuration.
+AI Workplace coordinates **all projects owned by the user**, not just XevoraHub or this repository. Each project must retain its own scope, resources, decisions, tasks, handoff, and access permissions.
+
+Use [the project profile template](templates/project/PROJECT_PROFILE.md) when adding a project. Do not assume a project is approved, active, or authorized merely because it appears in this file.
 
 ## 1. XevoraHub Roblox / GUI
 - Repository: https://github.com/bismaaaa20-cloud/GUI
@@ -31,8 +33,15 @@ This file describes project boundaries and current status. It is a coordination 
 
 ## 3. AI Workplace
 - Repository: https://github.com/bismaaaa20-cloud/AI-workplace-
-- Purpose: public-safe coordination, task ownership, decisions, and handoffs.
-- It must not become a place to store app secrets or private user data.
+- Purpose: universal coordination layer for every current and future project, approved AI identities, shared memory, tasks, decisions, and handoffs.
+- It is not an AI model or an application-specific project.
+- This repository is public; keep all content public-safe.
+
+## Adding future projects
+1. Copy `templates/project/PROJECT_PROFILE.md` into a project-specific folder.
+2. Fill in project ID, purpose, scope, resources, AI access, and security classification.
+3. Obtain owner approval before treating proposed scope or permissions as active.
+4. Keep project source code in its designated repository; do not mix unrelated project code into the workplace repository.
 
 ## General rule
 A plan is not approval. Do not create infrastructure, deploy services, add paid dependencies, or modify application repositories until the owner explicitly approves the relevant task.
