@@ -60,10 +60,20 @@ Keep entries concise, public-safe, and actionable.
 - Status: BLOCKED
 - Owner: Project owner
 - Executor: To be assigned
-- Scope: Implement Muk from the documented design when the owner is ready.
+- Scope: Implement Muk from the documented coordinator and tool-routing designs when the owner is ready.
 - Out of scope: Adding future agents or integrations before the owner defines them.
-- Acceptance criteria: Planning, decomposition, dependency DAG, capability matching, bounded scheduling, handoffs, validation, concise responses, and no unapproved paid APIs.
+- Acceptance criteria: Planning, decomposition, dependency DAG, context-aware Skill/MCP/Plugin selection, bounded scheduling, handoffs, validation, concise responses, and no unapproved paid APIs.
+- Related files: docs/architecture/MUK_COORDINATOR_SPEC.md, docs/architecture/MUK_CONTEXT_AWARE_TOOL_ROUTING.md
 - Notes: Owner has not written the script yet; no runtime exists.
+
+### [MUK-004] Implement live capability registry and automatic tool router
+- Status: OPEN (design documented; implementation not started)
+- Owner: Project owner
+- Executor: To be assigned
+- Scope: Build a live registry for available Skills, MCP tools, Plugin actions, and agents; implement context classification, capability matching, least-privilege filtering, cost/permission gates, tool selection, fallback, and audit records.
+- Out of scope: Claiming integrations are connected before they are configured and tested; enabling paid APIs or account connections without approval.
+- Acceptance criteria: Automated tests prove routing by context, selection of the smallest sufficient capability set, refusal of unavailable/unauthorized tools, user confirmation for consequential actions, honest failure handling, and no unapproved paid usage.
+- Related file: docs/architecture/MUK_CONTEXT_AWARE_TOOL_ROUTING.md
 
 ## Completed tasks
 - **AW-000:** Initial documentation-only coordination workspace merged into main (PR #1).
