@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "note": "Example only. All integrations default unavailable and unauthorized until configured and verified by the host.",
+  "capabilities": [
+    {
+      "id": "bugscout.gate_check",
+      "name": "BugScout gate_check",
+      "kind": "mcp",
+      "description": "Check source code for syntax errors and selected freeze/crash patterns",
+      "intents": ["code_debug", "coding"],
+      "keywords": ["lua", "luau", "script", "syntax", "bug", "error"],
+      "available": false,
+      "authorized": false,
+      "cost": "unknown",
+      "read_only": true
+    },
+    {
+      "id": "skill.coding",
+      "name": "Coding Skill",
+      "kind": "skill",
+      "description": "Guidance for implementing and debugging software",
+      "intents": ["coding", "code_debug"],
+      "keywords": ["code", "program", "function", "debug"],
+      "available": false,
+      "authorized": false,
+      "cost": "free",
+      "read_only": true
+    },
+    {
+      "id": "plugin.gmail.search",
+      "name": "Gmail search",
+      "kind": "plugin",
+      "description": "Search connected Gmail messages",
+      "intents": ["email"],
+      "keywords": ["email", "gmail", "inbox"],
+      "available": false,
+      "authorized": false,
+      "cost": "unknown",
+      "read_only": true
+    },
+    {
+      "id": "plugin.calendar.create",
+      "name": "Calendar event creation",
+      "kind": "plugin",
+      "description": "Create a calendar event",
+      "intents": ["calendar"],
+      "keywords": ["calendar", "meeting", "schedule", "rapat"],
+      "available": false,
+      "authorized": false,
+      "cost": "unknown",
+      "read_only": false,
+      "requires_confirmation": true
+    }
+  ]
+}
