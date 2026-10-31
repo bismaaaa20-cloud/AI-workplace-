@@ -34,3 +34,17 @@ Before any work, read:
 - Use a feature branch and pull request. Never push directly to `main`.
 - Owner approval is required for merge and consequential actions.
 - State exactly which tests were run. Never invent test results.
+
+
+## Secrets, cloud agents, and token discipline
+- Never ask the owner to paste API keys into chat, issues, PRs, source files, or logs.
+- For Codex Cloud, prefer Network secrets with exact Allowed domains; use direct environment variables only when code genuinely needs the raw value.
+- For GitHub Actions, use repository/environment Actions secrets or OIDC where supported; never expose secrets to fork PR workflows.
+- For local development, use an ignored .env file and OS credential storage. .env.example contains names only.
+- If a credential is exposed, stop, revoke/rotate it, and inspect logs/history. Deleting a file alone is not enough.
+- Never print environment variables or include secret values in test output.
+- Codex Cloud and Claude Code cloud runners must use hosted workspaces when cloud execution is requested. No local model inference or model-weight downloads.
+- Cloud execution does not imply free API usage. Only explicitly allow-listed free tiers are permitted.
+- Load only the skill needed for the task; discover MCP tools on demand; use a small read-only allow-list first.
+- Search exact paths and line ranges instead of reading whole files. Return concise summaries/diffs, not repository dumps.
+- Limit multi-agent review to two rounds. Never omit governance, security rules, owner approvals, or citations to save tokens.
