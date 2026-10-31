@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
 
 from app.core.group_engine import GroupEngine
 from app.providers.gemini_provider import GeminiProvider
-from app.security.secret_store import is_configured, safe_is_configured, is_vault_available
+from app.security.secret_store import safe_is_configured, is_vault_available
 
 
 class WorkerSignals(QObject):
@@ -30,7 +30,7 @@ class DiscussionWorker(QRunnable):
             rendered = "\n\n".join(f"### Gemini · {turn.provider}\n{turn.text}" for turn in turns)
             self.signals.finished.emit(rendered)
         except Exception as exc:
-            self.signals.failed.emit(str(exc))
+            self.signals.failed.emit("Request failed")
 
 
 class MainWindow(QMainWindow):
@@ -140,6 +140,11 @@ class MainWindow(QMainWindow):
         buttons.rejected.connect(dialog.reject)
         dialog.exec()
         self.status.setText(self._vault_status_text())
+
+    def _vault_status_text(self) -> str:
+        if not is_vault_available():
+            return "Secure vault unavailable"
+        return "Gemini: configured" if safe_is_configured("Gemini") else "Gemini: not configured"
 
     def _send_group_message(self) -> None:
         prompt = self.prompt.text().strip()
