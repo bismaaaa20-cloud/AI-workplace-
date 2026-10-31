@@ -7,3 +7,16 @@ __pycache__/
 *.db
 .pytest_cache/
 .DS_Store
+
+# Local secrets and sensitive material
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+.secret/
+
+# Local logs and databases
+logs/
+*.log
+*.sqlite

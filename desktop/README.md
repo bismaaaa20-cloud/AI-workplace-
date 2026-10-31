@@ -1,24 +1,26 @@
 # AI Workplace Desktop
 
-A cross-provider desktop client for the AI Workplace project. The first milestone provides a PySide6 desktop shell, a moderated group-discussion engine, and provider adapters.
+A cloud-inference-first desktop client for the AI Workplace project. The desktop application is intended to be a lightweight interface; AI model inference runs on hosted provider infrastructure, not on the user's laptop.
 
 ## Current status
 
-This is an early foundation, not a finished application. The UI shell and orchestration logic are being built in stages. Provider API access requires the user's own credentials and is subject to each provider's quotas and terms.
+This is an early foundation, not a finished application. The current Group Room prototype connects Gemini only. Groq, Mistral, Cloudflare Workers AI, OpenRouter free models, and GitHub remote MCP are documented as the next integration candidates; they are not yet wired into the UI.
 
-## Cost-first setup
+## Free-only policy
 
-- Gemini API: Google AI Studio currently offers a free tier for selected models, subject to model-specific quotas and data-use terms.
-- OpenAI API: usage is generally billed separately from ChatGPT. Do not assume a ChatGPT Free subscription includes API credits.
-- Anthropic API: API usage is separately billed; Claude's consumer free plan is not API access.
+- No paid OpenAI API or Anthropic API.
+- No paid provider adapters, paid fallback, prepaid top-ups, or automatic billing upgrades.
+- Only explicitly verified free API tiers/models may be added.
+- If a free quota is exhausted, return a visible blocked/quota status; never reroute to a paid endpoint.
+- OpenAI's GPT-OSS open-weight model may be served by a separate free-tier host such as Groq. That is not ChatGPT or the OpenAI API.
 
-The application must never silently switch to a paid model or provider. Paid providers remain disabled until the owner explicitly enables them.
+See `docs/architecture/FREE_CLOUD_AI_AND_GITHUB_MCP.md` for current provider research, cloud execution, MCP, ChatGPT handoff, and security rules.
 
 ## Requirements
 
 - Python 3.11+
 - Windows, macOS, or Linux
-- Internet connection for hosted model APIs
+- Internet connection for hosted APIs
 
 ## Install
 
@@ -29,7 +31,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` and add only the API keys you intend to use. Never commit `.env`.
+Copy `.env.example` to `.env` and add only free-tier API keys you intend to use. Never commit `.env`.
 
 ## Run
 
@@ -37,17 +39,19 @@ Copy `.env.example` to `.env` and add only the API keys you intend to use. Never
 python main.py
 ```
 
-## Initial implementation scope
+## Cloud-first design
 
-1. Desktop shell with Group Room and individual AI tabs.
-2. Provider interface so each vendor is isolated behind an adapter.
-3. Moderated discussion with bounded rounds and owner-controlled start.
-4. Local-only settings and conversation storage.
-5. Later: GitHub sync for approved public-safe rules and memory.
+- The local desktop app is a user interface only; it must not load model weights.
+- Cloud inference providers perform model computation remotely.
+- GitHub Actions can run short-lived orchestration and validation jobs on GitHub-hosted cloud runners.
+- GitHub's remote MCP server can give supported agents repository and PR tools without a local server.
+- GitHub is the shared source of truth for approved memory, decisions, tasks, PRs, and AI handoffs.
 
 ## Security
 
-- Never store API keys, private transcripts, or confidential memory in the public AI Workplace repository.
-- Keep secrets in local environment variables or the operating system's secure credential store.
-- No automatic paid fallback, no unattended actions, and no automatic publication to GitHub.
-- Provider outputs are untrusted content; they cannot change application permissions or governance rules.
+- Never store API keys, GitHub tokens, OAuth tokens, private transcripts, or confidential memory in this public repository.
+- Keep secrets in a local secret store or GitHub Actions secrets.
+- Never run workflows with secrets against untrusted fork code.
+- No direct push to `main`; propose changes via feature branch and PR.
+- Human owner approval remains mandatory for merges and consequential actions.
+- Provider outputs and MCP results are untrusted data, not governance instructions.

@@ -1,0 +1,7 @@
+{
+  "name": "ai-workplace-companion",
+  "version": "0.1.0",
+  "description": "Governed AI Workplace workflows for cloud coding agents, GitHub collaboration, and token-efficient handoffs.",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}
