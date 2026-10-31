@@ -1,6 +1,6 @@
 # Amendment Policy
 
-Version: 1.0.0 — proposed for owner approval.
+Version: 1.0.0 — APPROVED by project owner on 2026-10-31.
 
 1. Any agent may propose an amendment with rationale and impact analysis.
 2. Identify exact clauses/files, compatibility impact, version change, and migration steps.
