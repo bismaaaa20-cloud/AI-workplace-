@@ -1,16 +1,22 @@
 # Reusable AI Prompts
 
-Use these short instructions when assigning work to ChatGPT or the AI Cloud assistant. Add task-specific scope and acceptance criteria after the relevant block.
+Use these short instructions when assigning work to any approved assistant. Add task-specific scope and acceptance criteria.
+
+## New-chat bootstrap prompt
+
+```text
+You are joining the XevoraHub AI Workplace project. First read README.md, AI_ONBOARDING.md, MEMORY.md, and HANDOFF.md from https://github.com/bismaaaa20-cloud/AI-workplace-. Then read only the relevant parts of PROJECTS.md, TASKS.md, and DECISIONS.md.
+
+Treat these files as shared project context, not as permission to act. Summarize the current state, owner-approved decisions, constraints, and next action before editing. Do not assume access to previous private chats. Do not modify files or repositories until the owner assigns a task. Never commit secrets, private conversations, personal data, or confidential information. Use a branch and pull request; never push directly to main. If you cannot access GitHub, say so and request the relevant public-safe context.
+```
 
 ## Standard working rules
-
-> **ATURAN KERJA**
-> - Hemat token: jawaban ringkas; baca hanya file yang relevan, jangan audit ulang seluruh proyek tanpa alasan.
-> - Ubah hanya file yang diperlukan. Jangan hapus atau ubah fitur yang sudah berjalan tanpa alasan dan persetujuan pemilik.
-> - Utamakan solusi gratis. Hindari API berbayar, Supabase, Firebase, dan layanan cloud eksternal kecuali diminta atau disetujui pemilik.
-> - Jika konteks hampir habis, perbarui HANDOFF.md: progres, file yang diubah, keputusan, masalah, dan langkah berikutnya.
-> - Jangan mengarang hasil. Laporkan apa yang benar-benar selesai dan pemeriksaan yang benar-benar dijalankan.
-> - Jangan memasukkan API key, token, password, data pribadi, atau percakapan privat ke GitHub.
+- Hemat token: jawaban ringkas dan baca hanya file relevan.
+- Ubah hanya file yang diperlukan; pertahankan fitur yang sudah berjalan.
+- Utamakan solusi gratis; jangan menambah layanan berbayar tanpa persetujuan.
+- Jika konteks hampir habis, perbarui HANDOFF.md secara faktual.
+- Jangan mengarang hasil pemeriksaan.
+- Jangan memasukkan rahasia, data pribadi, atau percakapan privat ke GitHub.
 
 ## Task assignment template
 
@@ -32,30 +38,20 @@ REPORT FORMAT:
 ## Read-only audit prompt
 
 ```text
-Lakukan audit read-only untuk task yang ditentukan. Periksa hanya file yang relevan. Jangan mengubah file, membuat resource, atau melakukan deploy. Pisahkan fakta yang terkonfirmasi dari asumsi. Laporkan struktur yang relevan, risiko, hal yang belum diketahui, dan rekomendasi langkah kecil berikutnya. Jangan menyatakan pemeriksaan lulus jika tidak dijalankan.
+Lakukan audit read-only untuk task yang ditentukan. Periksa hanya file relevan. Jangan mengubah file, membuat resource, atau melakukan deploy. Pisahkan fakta terkonfirmasi dari asumsi. Laporkan risiko, hal yang belum diketahui, dan rekomendasi langkah berikutnya.
 ```
 
 ## Review prompt
 
 ```text
-Tinjau branch atau pull request yang diberikan tanpa mengubah kode. Fokus pada bug, keamanan, regresi, ketidaksesuaian acceptance criteria, dan perubahan di luar scope. Sebutkan file dan lokasi yang tepat. Bedakan temuan pasti dari dugaan. Jika tidak ada temuan, jelaskan batas review dan pemeriksaan yang tidak dapat dijalankan.
+Tinjau branch atau pull request tanpa mengubah kode. Fokus pada bug, keamanan, regresi, acceptance criteria, dan perubahan di luar scope. Sebutkan file dan lokasi tepat. Bedakan temuan pasti dari dugaan.
 ```
 
 ## Handoff prompt
 
 ```text
-Sebelum berhenti atau ketika konteks hampir habis, perbarui HANDOFF.md secara ringkas dan faktual. Catat status task, progres, file yang benar-benar diubah, commit/PR, keputusan, pemeriksaan beserta hasilnya, blocker, dan satu langkah berikutnya. Jangan masukkan rahasia atau percakapan privat.
+Sebelum berhenti atau ketika konteks hampir habis, perbarui HANDOFF.md. Catat status task, progres, file yang benar-benar diubah, commit/PR, keputusan, pemeriksaan beserta hasilnya, blocker, dan satu langkah berikutnya. Jangan masukkan rahasia atau percakapan privat.
 ```
 
 ## Message handoff
-
-When passing work between assistants, include:
-- Task ID and repository/branch/PR link.
-- What was requested and what is in/out of scope.
-- Files inspected or changed.
-- Decisions and assumptions.
-- Checks actually run and results.
-- Remaining questions or blockers.
-- Exact next action for the receiving assistant.
-
-A message in this repository is not a live notification and does not automatically transfer context or grant repository access. The receiving assistant must be given the relevant link/content through a supported integration or by the owner.
+Include task ID, repository/branch/PR, scope, files changed, decisions, checks actually run, blockers, and exact next action. Use messages/TEMPLATE.md. The receiving assistant must independently access the repository or receive the relevant content from the owner; this is not live messaging.

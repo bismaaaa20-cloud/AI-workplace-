@@ -3,35 +3,33 @@
 ## Current state
 - Repository: https://github.com/bismaaaa20-cloud/AI-workplace-
 - Default branch: main
-- Purpose: shared, non-secret coordination for the project owner, ChatGPT, and the AI Cloud assistant.
-- Workspace changes: initial documentation setup is merged (PR #1); this follow-up workflow expansion is being prepared on a separate branch.
-- Linked Roblox repository: https://github.com/bismaaaa20-cloud/GUI — separate from this coordination hub.
-- Get Key website: separate project; proposed architecture only, not approved.
+- Purpose: public-safe shared coordination and project memory for multiple approved AI assistants.
+- PR #2 workflow expansion is merged.
+- This update adds shared memory and onboarding documents on a separate branch; it is not merged until its PR is accepted.
+- GUI repository: https://github.com/bismaaaa20-cloud/GUI — separate and protected by default.
+- Get Key website architecture remains a proposal only.
 
-## Completed
-- Created the initial context, task board, decision log, handoff, security rules, and public-safe message inbox.
-- Added a project map and reusable prompt/handoff guidance in the current documentation update.
-- Recorded token-efficiency and free-first working rules.
-- Added a review task for the Get Key Cloudflare architecture proposal.
+## Shared AI memory
+- MEMORY.md: durable project goals, boundaries, and collaboration rules.
+- AI_ONBOARDING.md: instructions and bootstrap prompt for a new AI/chat.
+- HANDOFF.md: current work status and next actions.
+- TASKS.md: assigned work.
+- DECISIONS.md: owner-approved decisions.
+- messages/CHAT_LOG.md and messages/TEMPLATE.md: optional public-safe summaries and handoffs only.
+- New assistants must independently read the repository; files do not create automatic live chat or grant access.
 
-## Current project status
-- **Get Key architecture:** proposal only. Cloudflare Pages + Pages Functions (Hono) + D1 + Cron, Discord OAuth, Turnstile, and manual billing were proposed by the AI Cloud assistant. No architecture approval, infrastructure creation, code changes, or deployment is confirmed.
-- **AI-to-AI communication:** not automated. The repository is a shared record; assistants must be given repository access through their own supported tools or the owner must manually pass handoffs.
-- **Repository visibility:** public; all content must remain public-safe.
+## Safety
+- Repository is public; all committed content must be safe for anyone to read.
+- Never store credentials, private conversation transcripts, personal data, or confidential information.
+- Use least-privilege access; prefer read-only for reviewers.
+- Work through branches and pull requests; do not push directly to main.
+- Do not modify GUI runtime code or create Get Key infrastructure without explicit task approval.
 
 ## Next actions
-1. Owner confirms the exact AI Cloud product and how it can access GitHub.
-2. Owner decides whether to keep this repository public or make it private.
-3. Review the Get Key architecture proposal and verify current Cloudflare limits before approval.
-4. Assign one executor to the next task; the other assistant reviews.
-5. Update this file at the end of each work session.
-
-## Safety boundaries
-- Never put API keys, tokens, passwords, private conversations, or personal data in this repository.
-- Never expose secrets in GitHub Actions logs or commit messages.
-- Do not modify GUI runtime scripts or website code unless a task explicitly authorizes it.
-- No automatic AI-to-AI communication is active merely because these documents exist.
-- Never claim a test, deployment, or verification happened unless it actually did.
+1. Review and merge the shared-memory PR if its changes are acceptable.
+2. Give each new assistant authorized read access or provide the public-safe onboarding links.
+3. Assign one executor per task and keep HANDOFF.md current.
+4. Decide later whether a separately authenticated live multi-AI chat integration is needed.
 
 ## Last update
-2026-10-31 — workflow expansion and Get Key proposal handoff.
+2026-10-31 — shared AI memory and new-assistant onboarding prepared.
