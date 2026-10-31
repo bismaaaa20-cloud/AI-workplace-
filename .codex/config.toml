@@ -1,0 +1,13 @@
+# AI Workplace Codex project configuration.
+# Never put bearer tokens, API keys, or OAuth secrets in this file.
+# Authenticate through the MCP provider's OAuth flow or Codex Cloud Network Secrets.
+
+[mcp_servers.github]
+url = "https://api.githubcopilot.com/mcp/"
+enabled = true
+# Start with read-only tools. Add a small enabled_tools allow-list only after
+# checking the exact tool names returned by the server and owner approval.
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
+enabled = true
