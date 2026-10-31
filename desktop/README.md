@@ -31,7 +31,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` and add only free-tier API keys you intend to use. Never commit `.env`.
+Store provider keys through the desktop app's Settings → API Security using the operating system credential vault. Do not use .env for production credentials. Never commit keys or tokens.
 
 ## Run
 
@@ -50,7 +50,7 @@ python main.py
 ## Security
 
 - Never store API keys, GitHub tokens, OAuth tokens, private transcripts, or confidential memory in this public repository.
-- Keep secrets in a local secret store or GitHub Actions secrets.
+- Desktop provider keys must use the OS credential vault (Windows Credential Manager, macOS Keychain, or Linux Secret Service). Never store them in GitHub or shared project files. See docs/security/LOCAL_SECRET_VAULT.md.
 - Never run workflows with secrets against untrusted fork code.
 - No direct push to `main`; propose changes via feature branch and PR.
 - Human owner approval remains mandatory for merges and consequential actions.
