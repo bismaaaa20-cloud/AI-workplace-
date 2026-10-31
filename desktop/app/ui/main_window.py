@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal
+from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal, Qt
 from PySide6.QtWidgets import (
     QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox,
     QPushButton, QTabWidget, QTextEdit, QVBoxLayout, QWidget,
@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
 
 from app.core.group_engine import GroupEngine
 from app.providers.gemini_provider import GeminiProvider
-from app.security.secret_store import is_configured
+from app.security.secret_store import safe_is_configured, is_vault_available
 
 
 class WorkerSignals(QObject):
@@ -30,7 +30,7 @@ class DiscussionWorker(QRunnable):
             rendered = "\n\n".join(f"### Gemini · {turn.provider}\n{turn.text}" for turn in turns)
             self.signals.finished.emit(rendered)
         except Exception as exc:
-            self.signals.failed.emit(str(exc))
+            self.signals.failed.emit("Request failed")
 
 
 class MainWindow(QMainWindow):
@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         header.addWidget(title)
         header.addWidget(subtitle)
         header.addStretch()
-        self.status = QLabel("Gemini: configured" if is_configured("Gemini") else "Gemini: not configured")
+        self.status = QLabel(self._vault_status_text())
         self.status.setObjectName("status")
         header.addWidget(self.status)
         self.api_security_button = QPushButton("API Security")
@@ -107,8 +107,9 @@ class MainWindow(QMainWindow):
         provider.addItems(["Gemini"])
         secret = QLineEdit()
         secret.setEchoMode(QLineEdit.EchoMode.Password)
+        secret.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         secret.setPlaceholderText("API key (hidden)")
-        state = QLabel("Configured" if is_configured("Gemini") else "Not configured")
+        state = QLabel("Configured" if safe_is_configured("Gemini") else ("Not configured" if is_vault_available() else "Secure vault unavailable"))
         form.addRow("Provider", provider)
         form.addRow("API key", secret)
         form.addRow("Local vault", state)
@@ -138,13 +139,18 @@ class MainWindow(QMainWindow):
         delete_btn.clicked.connect(remove)
         buttons.rejected.connect(dialog.reject)
         dialog.exec()
-        self.status.setText("Gemini: configured" if is_configured("Gemini") else "Gemini: not configured")
+        self.status.setText(self._vault_status_text())
+
+    def _vault_status_text(self) -> str:
+        if not is_vault_available():
+            return "Secure vault unavailable"
+        return "Gemini: configured" if safe_is_configured("Gemini") else "Gemini: not configured"
 
     def _send_group_message(self) -> None:
         prompt = self.prompt.text().strip()
         if not prompt:
             return
-        if not is_configured("Gemini"):
+        if not safe_is_configured("Gemini"):
             QMessageBox.information(
                 self, "Gemini API key required",
                 "Add your key through API Security. It will be stored in your operating system credential vault."
