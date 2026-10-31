@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal
+from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal, Qt
 from PySide6.QtWidgets import (
     QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox,
     QPushButton, QTabWidget, QTextEdit, QVBoxLayout, QWidget,
@@ -106,7 +106,8 @@ class MainWindow(QMainWindow):
         provider = QComboBox()
         provider.addItems(["Gemini"])
         secret = QLineEdit()
-        secret.setEchoMode(QLineEdit.EchoMode.Password)\n        secret.setContextMenuPolicy(__import__("PySide6.QtCore", fromlist=["Qt"]).Qt.ContextMenuPolicy.NoContextMenu)
+        secret.setEchoMode(QLineEdit.EchoMode.Password)
+        secret.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
         secret.setPlaceholderText("API key (hidden)")
         state = QLabel("Configured" if safe_is_configured("Gemini") else ("Not configured" if is_vault_available() else "Secure vault unavailable"))
         form.addRow("Provider", provider)
