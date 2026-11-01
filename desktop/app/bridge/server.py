@@ -12,7 +12,7 @@ import hmac
 import ipaddress
 import json
 import os
-import secrets
+import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 from urllib.parse import urlsplit
@@ -55,6 +55,8 @@ def create_server(
     if isinstance(max_concurrency, bool) or not isinstance(max_concurrency, int) or max_concurrency < 1:
         raise ValueError("max_concurrency must be a positive integer")
 
+    request_slots = threading.BoundedSemaphore(max_concurrency)
+
     class BridgeHandler(BaseHTTPRequestHandler):
         server_version = "PlugNativeBridge/1"
         sys_version = ""
@@ -74,19 +76,25 @@ def create_server(
             self.wfile.write(body)
 
         def do_GET(self) -> None:
-            supplied = self.headers.get("Authorization", "")
-            expected = f"Bearer {token}"
-            if not hmac.compare_digest(supplied, expected):
-                self._send_json(401, {"error": {"code": "unauthorized", "message": "valid bearer token required"}})
+            if not request_slots.acquire(blocking=False):
+                self._send_json(503, {"error": {"code": "busy", "message": "bridge concurrency limit reached"}})
                 return
+            try:
+                supplied = self.headers.get("Authorization", "")
+                expected = f"Bearer {token}"
+                if not hmac.compare_digest(supplied, expected):
+                    self._send_json(401, {"error": {"code": "unauthorized", "message": "valid bearer token required"}})
+                    return
 
-            path = urlsplit(self.path).path
-            if path == "/v1/health":
-                self._send_json(200, health_payload())
-            elif path == "/v1/capabilities":
-                self._send_json(200, capabilities_payload())
-            else:
-                self._send_json(404, {"error": {"code": "not_found", "message": "endpoint not found"}})
+                path = urlsplit(self.path).path
+                if path == "/v1/health":
+                    self._send_json(200, health_payload())
+                elif path == "/v1/capabilities":
+                    self._send_json(200, capabilities_payload())
+                else:
+                    self._send_json(404, {"error": {"code": "not_found", "message": "endpoint not found"}})
+            finally:
+                request_slots.release()
 
         def do_POST(self) -> None:
             self._send_json(404, {"error": {"code": "not_found", "message": "endpoint not found"}})
@@ -98,8 +106,6 @@ def create_server(
             self._send_json(404, {"error": {"code": "not_found", "message": "endpoint not found"}})
 
     server = _BridgeHTTPServer((host, port), BridgeHandler)
-    server.bridge_token = token
-    server.max_concurrency = max_concurrency
     return server
 
 
