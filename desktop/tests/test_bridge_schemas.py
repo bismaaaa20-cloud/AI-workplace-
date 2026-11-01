@@ -72,6 +72,17 @@ class BridgeSchemaTests(unittest.TestCase):
         with self.assertRaises(ProtocolValidationError):
             validate_chat_response(response, expected_request_id="r1")
 
+    def test_rejects_malformed_error_envelope(self):
+        response = {
+            "protocol_version": PROTOCOL_VERSION,
+            "request_id": "r1",
+            "status": "failed",
+            "answer": None,
+            "error": {"code": "failed"},
+        }
+        with self.assertRaises(ProtocolValidationError):
+            validate_chat_response(response)
+
 
 if __name__ == "__main__":
     unittest.main()
