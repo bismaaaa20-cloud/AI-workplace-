@@ -17,7 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 from urllib.parse import urlsplit
 
-from app.bridge.schemas import capabilities_payload, health_payload
+from app.bridge.schemas import capabilities_payload, error_payload, health_payload
 
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
@@ -77,13 +77,13 @@ def create_server(
 
         def do_GET(self) -> None:
             if not request_slots.acquire(blocking=False):
-                self._send_json(503, {"error": {"code": "busy", "message": "bridge concurrency limit reached"}})
+                self._send_json(503, error_payload("busy", "bridge concurrency limit reached"))
                 return
             try:
                 supplied = self.headers.get("Authorization", "")
                 expected = f"Bearer {token}"
                 if not hmac.compare_digest(supplied, expected):
-                    self._send_json(401, {"error": {"code": "unauthorized", "message": "valid bearer token required"}})
+                    self._send_json(401, error_payload("unauthorized", "valid bearer token required"))
                     return
 
                 path = urlsplit(self.path).path
@@ -92,7 +92,7 @@ def create_server(
                 elif path == "/v1/capabilities":
                     self._send_json(200, capabilities_payload())
                 else:
-                    self._send_json(404, {"error": {"code": "not_found", "message": "endpoint not found"}})
+                    self._send_json(404, error_payload("not_found", "endpoint not found"))
             finally:
                 request_slots.release()
 
