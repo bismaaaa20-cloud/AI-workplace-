@@ -86,7 +86,7 @@ def validate_chat_response(payload: Any, *, expected_request_id: str | None = No
         raise ProtocolValidationError("response request_id does not match request")
 
     status = payload.get("status")
-    if status not in {"completed", "failed"}:
+    if not isinstance(status, str) or status not in {"completed", "failed"}:
         raise ProtocolValidationError("status must be 'completed' or 'failed'")
 
     answer = payload.get("answer")
@@ -100,10 +100,25 @@ def validate_chat_response(payload: Any, *, expected_request_id: str | None = No
         raise ProtocolValidationError("tasks must be a list")
 
     error = payload.get("error")
-    if error is not None and not isinstance(error, dict):
-        raise ProtocolValidationError("error must be null or an object")
+    if error is not None:
+        if not isinstance(error, dict):
+            raise ProtocolValidationError("error must be null or an object")
+        if set(error) != {"code", "message"}:
+            raise ProtocolValidationError("error must contain exactly code and message")
+        if not isinstance(error["code"], str) or not error["code"].strip():
+            raise ProtocolValidationError("error.code must be a non-empty string")
+        if not isinstance(error["message"], str) or not error["message"].strip():
+            raise ProtocolValidationError("error.message must be a non-empty string")
 
     return dict(payload)
+
+
+def error_payload(code: str, message: str) -> dict[str, Any]:
+    if not isinstance(code, str) or not code.strip():
+        raise ProtocolValidationError("error code must be a non-empty string")
+    if not isinstance(message, str) or not message.strip():
+        raise ProtocolValidationError("error message must be a non-empty string")
+    return {"error": {"code": code, "message": message}}
 
 
 def health_payload() -> dict[str, Any]:
